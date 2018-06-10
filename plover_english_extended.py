@@ -1,67 +1,119 @@
-# SKTFPLRAO*EURWBPGHTSDZ
 
 KEYS = (
     '#',
-    'S-', 'K-', 'T-', 'F-', 'P-', 'L-', 'R-',
+    'S-', 'T-', 'K-', 'P-', 'W-', 'H-', 'R-',
     'A-', 'O-',
     '*',
     '-E', '-U',
-    '-R', '-W', '-B', '-P', '-G', '-H', '-T', '-S', '-D', '-Z',
+    '-F', '-R', '-P', '-B', '-L', '-G', '-T', '-S', '-D', '-Z',
+    '-a', '-b', '-c', '-d', '-e', '-f', '-g', '-h', '-i',
+    's-',
+    '-x', '-y', '-z',
 )
 
 IMPLICIT_HYPHEN_KEYS = ('A-', 'O-', '5-', '0-', '-E', '-U', '*')
 
-SUFFIX_KEYS = ('-S', '-G', '-Z', '-D')
+SUFFIX_KEYS = ('-Z', '-D', '-S', '-G')
 
 NUMBER_KEY = '#'
 
 NUMBERS = {
     'S-': '1-',
-    'K-': '2-',
-    'T-': '3-',
-    'F-': '4-',
+    'T-': '2-',
+    'P-': '3-',
+    'H-': '4-',
     'A-': '5-',
     'O-': '0-',
-    '-R': '-6',
-    '-B': '-7',
-    '-G': '-8',
+    '-F': '-6',
+    '-P': '-7',
+    '-L': '-8',
     '-T': '-9',
 }
 
 UNDO_STROKE_STENO = '*'
 
 ORTHOGRAPHY_RULES = [
-    # Collapse vowels in suffixes
-    # como + endo = comendo
-    # cai + iria = cairia
-    (r'^(.+)[aeouiáéíóúãõâêôàü] \^ ([aeouiáéíóúãõâêôàü]\w*)$', r'\1\2'),
+    # == +ly ==
+    # artistic + ly = artistically
+    (r'^(.*[aeiou]c) \^ ly$', r'\1ally'),
+
+    # == +ry ==
+    # statute + ry = statutory
+    (r'^(.*t)e \^ ry$', r'\1ory'),
+
+    # == t +cy ==
+    # frequent + cy = frequency (tcy/tecy removal)
+    (r'^(.*[naeiou])te? \^ cy$', r'\1cy'),
+
+    # == +s ==
+    # establish + s = establishes (sibilant pluralization)
+    (r'^(.*(?:s|sh|x|z|zh)) \^ s$', r'\1es'),
+    # speech + s = speeches (soft ch pluralization)
+    (r'^(.*(?:oa|ea|i|ee|oo|au|ou|l|n|(?<![gin]a)r|t)ch) \^ s$', r'\1es'),
+    # cherry + s = cherries (consonant + y pluralization)
+    (r'^(.+[bcdfghjklmnpqrstvwxz])y \^ s$', r'\1ies'),
+
+    # == y ==
+    # die+ing = dying
+    (r'^(.+)ie \^ ing$', r'\1ying'),
+    # metallurgy + ist = metallurgist
+    (r'^(.+[cdfghlmnpr])y \^ ist$', r'\1ist'),
+    # beauty + ful = beautiful (y -> i)
+    (r'^(.+[bcdfghjklmnpqrstvwxz])y \^ ([a-hj-xz].*)$', r'\1i\2'),
+
+    # == e ==
+    # write + en = written
+    (r'^(.+)te \^ en$', r'\1tten'),
+    # free + ed = freed
+    (r'^(.+e)e \^ (e.+)$', r'\1\2'),
+    # narrate + ing = narrating (silent e)
+    (r'^(.+[bcdfghjklmnpqrstuvwxz])e \^ ([aeiouy].*)$', r'\1\2'),
+
+    # == misc ==
+    # defer + ed = deferred (consonant doubling)   XXX monitor(stress not on last syllable)
+    (r'^(.*(?:[bcdfghjklmnprstvwxyz]|qu)[aeiou])([bcdfgklmnprtvz]) \^ ([aeiouy].*)$', r'\1\2\2\3'),
 ]
 
-ORTHOGRAPHY_RULES_ALIASES = {}
+ORTHOGRAPHY_RULES_ALIASES = {
+    'able': 'ible',
+}
 
-ORTHOGRAPHY_WORDLIST = None
+ORTHOGRAPHY_WORDLIST = 'american_english_words.txt'
 
 KEYMAPS = {
     'Gemini PR': {
-        '#'         : ('#1', '#2', '#3', '#4', '#5', '#6', '#7', '#8', '#9', '#A', '#B', '#C'),
-        'S-'        : ('S1-', 'S2-'),
-        'K-'        : 'T-',
-        'T-'        : 'K-',
-        'F-'        : 'P-',
-        'P-'        : 'W-',
-        'L-'        : 'H-',
+        '#'         : '#1',
+        '-a'         : '#2',
+        '-b'         : '#3',
+        '-c'         : '#4',
+        '-d'         : '#5',
+        '-e'         : '#6',
+        '-f'         : '#7',
+        '-g'         : '#8',
+        '-h'         : '#9',
+        '-i'         : '#A',
+        'S-'        : 'S1-',
+        's-'        : 'S2-',
+        'T-'        : 'T-',
+        'K-'        : 'K-',
+        'P-'        : 'P-',
+        'W-'        : 'W-',
+        'H-'        : 'H-',
         'R-'        : 'R-',
         'A-'        : 'A-',
         'O-'        : 'O-',
-        '*'         : ('*1', '*2', '*3', '*4'),
+        '*'         : '*1',
+        '-x'         : '*2',
+        '-y'         : '*3',
+        '-z'         : '*4',
         '-E'        : '-E',
         '-U'        : '-U',
-        '-R'        : '-F',
-        '-W'        : '-R',
-        '-B'        : '-P',
-        '-P'        : '-B',
-        '-G'        : '-L',
-        '-H'        : '-G',
+        '-F'        : '-F',
+        '-R'        : '-R',
+        '-P'        : '-P',
+        '-B'        : '-B',
+        '-L'        : '-L',
+        '-G'        : '-G',
         '-T'        : '-T',
         '-S'        : '-S',
         '-D'        : '-D',
@@ -71,23 +123,23 @@ KEYMAPS = {
     'Keyboard': {
         '#'         : ('1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '='),
         'S-'        : ('a', 'q'),
-        'K-'        : 'w',
-        'T-'        : 's',
-        'F-'        : 'e',
-        'P-'        : 'd',
-        'L-'        : 'r',
+        'T-'        : 'w',
+        'K-'        : 's',
+        'P-'        : 'e',
+        'W-'        : 'd',
+        'H-'        : 'r',
         'R-'        : 'f',
         'A-'        : 'c',
         'O-'        : 'v',
         '*'         : ('t', 'g', 'y', 'h'),
         '-E'        : 'n',
         '-U'        : 'm',
-        '-R'        : 'u',
-        '-W'        : 'j',
-        '-B'        : 'i',
-        '-P'        : 'k',
-        '-G'        : 'o',
-        '-H'        : 'l',
+        '-F'        : 'u',
+        '-R'        : 'j',
+        '-P'        : 'i',
+        '-B'        : 'k',
+        '-L'        : 'o',
+        '-G'        : 'l',
         '-T'        : 'p',
         '-S'        : ';',
         '-D'        : '[',
@@ -99,23 +151,23 @@ KEYMAPS = {
     'Passport': {
         '#'    : '#',
         'S-'   : ('S', 'C'),
-        'K-'   : 'T',
-        'T-'   : 'K',
-        'F-'   : 'P',
-        'P-'   : 'W',
-        'L-'   : 'H',
+        'T-'   : 'T',
+        'K-'   : 'K',
+        'P-'   : 'P',
+        'W-'   : 'W',
+        'H-'   : 'H',
         'R-'   : 'R',
         'A-'   : 'A',
         'O-'   : 'O',
         '*'    : ('~', '*'),
         '-E'   : 'E',
         '-U'   : 'U',
-        '-R'   : 'F',
-        '-W'   : 'Q',
-        '-B'   : 'N',
-        '-P'   : 'B',
-        '-G'   : 'L',
-        '-H'   : 'G',
+        '-F'   : 'F',
+        '-R'   : 'Q',
+        '-P'   : 'N',
+        '-B'   : 'B',
+        '-L'   : 'L',
+        '-G'   : 'G',
         '-T'   : 'Y',
         '-S'   : 'X',
         '-D'   : 'D',
@@ -125,23 +177,23 @@ KEYMAPS = {
     'Stentura': {
         '#'    : '#',
         'S-'   : 'S-',
-        'K-'   : 'T-',
-        'T-'   : 'K-',
-        'F-'   : 'P-',
-        'P-'   : 'W-',
-        'L-'   : 'H-',
+        'T-'   : 'T-',
+        'K-'   : 'K-',
+        'P-'   : 'P-',
+        'W-'   : 'W-',
+        'H-'   : 'H-',
         'R-'   : 'R-',
         'A-'   : 'A-',
         'O-'   : 'O-',
         '*'    : '*',
         '-E'   : '-E',
         '-U'   : '-U',
-        '-R'   : '-F',
-        '-W'   : '-R',
-        '-B'   : '-P',
-        '-P'   : '-B',
-        '-G'   : '-L',
-        '-H'   : '-G',
+        '-F'   : '-F',
+        '-R'   : '-R',
+        '-P'   : '-P',
+        '-B'   : '-B',
+        '-L'   : '-L',
+        '-G'   : '-G',
         '-T'   : '-T',
         '-S'   : '-S',
         '-D'   : '-D',
@@ -151,23 +203,23 @@ KEYMAPS = {
     'TX Bolt': {
         '#'    : '#',
         'S-'   : 'S-',
-        'K-'   : 'T-',
-        'T-'   : 'K-',
-        'F-'   : 'P-',
-        'P-'   : 'W-',
-        'L-'   : 'H-',
+        'T-'   : 'T-',
+        'K-'   : 'K-',
+        'P-'   : 'P-',
+        'W-'   : 'W-',
+        'H-'   : 'H-',
         'R-'   : 'R-',
         'A-'   : 'A-',
         'O-'   : 'O-',
         '*'    : '*',
         '-E'   : '-E',
         '-U'   : '-U',
-        '-R'   : '-F',
-        '-W'   : '-R',
-        '-B'   : '-P',
-        '-P'   : '-B',
-        '-G'   : '-L',
-        '-H'   : '-G',
+        '-F'   : '-F',
+        '-R'   : '-R',
+        '-P'   : '-P',
+        '-B'   : '-B',
+        '-L'   : '-L',
+        '-G'   : '-G',
         '-T'   : '-T',
         '-S'   : '-S',
         '-D'   : '-D',
@@ -176,23 +228,23 @@ KEYMAPS = {
     'Treal': {
         '#'    : ('#1', '#2', '#3', '#4', '#5', '#6', '#7', '#8', '#9', '#A', '#B'),
         'S-'   : ('S1-', 'S2-'),
-        'K-'   : 'T-',
-        'T-'   : 'K-',
-        'F-'   : 'P-',
-        'P-'   : 'W-',
-        'L-'   : 'H-',
+        'T-'   : 'T-',
+        'K-'   : 'K-',
+        'P-'   : 'P-',
+        'W-'   : 'W-',
+        'H-'   : 'H-',
         'R-'   : 'R-',
         'A-'   : 'A-',
         'O-'   : 'O-',
         '*'    : ('*1', '*2'),
         '-E'   : '-E',
         '-U'   : '-U',
-        '-R'   : '-F',
-        '-W'   : '-R',
-        '-B'   : '-P',
-        '-P'   : '-B',
-        '-G'   : '-L',
-        '-H'   : '-G',
+        '-F'   : '-F',
+        '-R'   : '-R',
+        '-P'   : '-P',
+        '-B'   : '-B',
+        '-L'   : '-L',
+        '-G'   : '-G',
         '-T'   : '-T',
         '-S'   : '-S',
         '-D'   : '-D',
@@ -202,4 +254,5 @@ KEYMAPS = {
 }
 
 DICTIONARIES_ROOT = 'asset:plover:assets'
-DEFAULT_DICTIONARIES = ()
+DEFAULT_DICTIONARIES = ('user.json', 'commands.json', 'main.json')
+
